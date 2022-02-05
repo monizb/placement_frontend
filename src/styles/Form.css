@@ -1,0 +1,11 @@
+.background {
+    height: 100vh; /* Magic here */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .LoginIcon {
+    width: 100px;
+    /* height: 150px; */
+  }
