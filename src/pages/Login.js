@@ -3,6 +3,8 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { TextField, Button } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import LoginIcon from "../assets/aac.png";
 import "../styles/Background.css";
 function Login() {
@@ -21,11 +23,21 @@ function Login() {
                 // ...
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                alert(errorMessage);
-                console.log(error);
-            });
+                console.log(error.code);
+                if (error.code === 'auth/wrong-password') {
+                    toast.error('Please check the Password');
+                }
+                if (error.code === 'auth/user-not-found') {
+                    toast.error('Please check the Email');
+                }
+            })
+        // .catch((error) => {
+        //     const errorCode = error.code;
+        //     const errorMessage = error.message;
+        //     alert(errorMessage);
+        //     console.log(error);
+        // });
+
     }
 
         ;
@@ -33,6 +45,7 @@ function Login() {
         <div>
             <div ><Navbar name='Sign Up' /></div>
             <div className='background' >
+                <ToastContainer />
                 <div className='LoginForm' style={{ borderRadius: 12, backgroundColor: 'white', padding: 65, margin: 'auto', justifyContent: 'center', alignItems: 'center', height: 'fit-content', width: 'fit-content' }} >
                     <img className="LoginIcon" src={LoginIcon} alt="logo" />
                     <h2 style={{ marginTop: 30, backgroundColor: '#283679', fontFamily: "Nunito", color: 'white', padding: 8, borderRadius: 3, paddingInline: 100 }}>Admin</h2>

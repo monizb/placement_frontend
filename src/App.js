@@ -8,14 +8,15 @@ import { auth } from "./firebase.js";
 import Dashboard from "./pages/Dashboard";
 //     getAuth()
 // .setCustomUserClaims(userRecord.uid, { roles: ["student"] })
-const dd = auth;
-
+// const dd = auth;
+const user = auth.currentUser;
 function RequireAuth() {
-  let auth = dd;
 
-  if (!auth.currentUser) {
+
+  if (!user) {
     return <Navigate to="/login" />;
   }
+
 
   return <Outlet />;
 }

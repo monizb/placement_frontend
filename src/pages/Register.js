@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { TextField, Button } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import LoginIcon from "../assets/aac.png";
 import "../styles/Background.css";
 
@@ -25,7 +27,7 @@ function Register() {
                 console.log(res);
                 console.log(res.data);
                 if (res.data.success === 'false') {
-                    alert(res.error.message);
+                    toast.error(res.error.message);
                 } else {
                     console.log(res.data.message);
                     history("/dashboard");
@@ -35,11 +37,11 @@ function Register() {
                 if (error.response) {
                     if (error.response.data.error.message) {
                         console.log(error.response.data.error.message);
-                        alert(error.response.data.error.message);
+                        toast.error(error.response.data.error.message);
                     }
                     else {
                         console.log(error.response.data.error);
-                        alert(error.response.data.error);
+                        toast.error(error.response.data.error);
                     }
                 }
             });
@@ -48,6 +50,7 @@ function Register() {
         <div>
             <div ><Navbar name='Sign In' /></div>
             <div className='background' >
+                <ToastContainer />
                 <div className='LoginForm' style={{ borderRadius: 12, backgroundColor: 'white', padding: 65, margin: 'auto', justifyContent: 'center', alignItems: 'center', height: 'fit-content', width: 'fit-content' }} >
                     <img className="LoginIcon" src={LoginIcon} alt="logo" />
                     <h2 style={{ marginTop: 30, backgroundColor: '#283679', fontFamily: "Nunito", color: 'white', padding: 8, borderRadius: 3, paddingInline: 100 }}>Student</h2>
