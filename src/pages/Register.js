@@ -13,7 +13,8 @@ function Register() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
-    const history = useNavigate();
+    const navigate = useNavigate();
+
 
     const register = () => {
         let url = 'https://acharya-placement-dev.herokuapp.com/api/auth/student/signup';
@@ -30,7 +31,7 @@ function Register() {
                     toast.error(res.error.message);
                 } else {
                     console.log(res.data.message);
-                    history("/dashboard");
+                    navigate("/dashboard");
                 }
             })
             .catch((error) => {

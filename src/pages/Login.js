@@ -7,10 +7,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoginIcon from "../assets/aac.png";
 import "../styles/Background.css";
+
 function Login() {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
-    const history = useNavigate();
+    const navigate = useNavigate();
 
     const login = () => {
         const auth = getAuth();
@@ -18,7 +19,7 @@ function Login() {
             .then((userCredential) => {
                 // Signed in 
                 const user = userCredential.user;
-                history("/dashboard");
+                navigate("/dashboard");
                 console.log('login success');
                 // ...
             })
@@ -31,16 +32,8 @@ function Login() {
                     toast.error('Please check the Email');
                 }
             })
-        // .catch((error) => {
-        //     const errorCode = error.code;
-        //     const errorMessage = error.message;
-        //     alert(errorMessage);
-        //     console.log(error);
-        // });
+    };
 
-    }
-
-        ;
     return (
         <div>
             <div ><Navbar name='Sign Up' /></div>
