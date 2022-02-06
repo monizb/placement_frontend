@@ -1,16 +1,17 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route, Link, Navigate, Outlet } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
-import React, { useEffect, useState } from 'react';
-import { auth } from "./firebase";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Register from "./pages/Register";
+import React from 'react';
+import { auth } from "./firebase.js";
+import Dashboard from "./pages/Dashboard";
 //     getAuth()
 // .setCustomUserClaims(userRecord.uid, { roles: ["student"] })
-
+const dd = auth;
 
 function RequireAuth() {
-  let auth = getAuth();
+  let auth = dd;
 
   if (!auth.currentUser) {
     return <Navigate to="/login" />;
@@ -26,11 +27,10 @@ function App() {
       <Router>
         <Routes>
           <Route exact path="/" element={<Landing />} />
+          <Route exact path="/register" element={<Register />} />
           <Route exact path="/login" element={<Login />} />
-          <Route
-            element={<RequireAuth />}
-          >
-            <Route path="/dashboard" element={<Landing />} />
+          <Route element={<RequireAuth />}>
+            <Route path="/dashboard" element={<Dashboard />} />
           </Route>
         </Routes>
       </Router>

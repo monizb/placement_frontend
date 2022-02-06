@@ -1,9 +1,15 @@
 import React from "react";
 import Navbar from "../components/Navbar";
+import "../styles/Background.css";
 function Landing() {
   return (
     <div>
-      <Navbar name='Login' />
+      <div>
+        <Navbar name='Sign In' />
+      </div>
+      <div className='background'>
+        <h1>Welcome to the Landing Page</h1>
+      </div>
     </div>
   );
 }
