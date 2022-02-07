@@ -1,13 +1,13 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-function Dashboard() {
+function Dashboard({ name }) {
     return (
         <div>
             <div>
                 <Navbar name='Sign Out' />
             </div>
             <div className='background'>
-                <h1>Welcome to the Dashboard Page</h1>
+                <h1>Welcome to the {name} Dashboard Page</h1>
             </div>
         </div>
     );

@@ -15,7 +15,6 @@ function Register() {
     const [pass, setPass] = useState("");
     const navigate = useNavigate();
 
-
     const register = () => {
         let url = 'https://acharya-placement-dev.herokuapp.com/api/auth/student/signup';
         let user = {
@@ -25,23 +24,23 @@ function Register() {
         };
         axios.post(url, user)
             .then(res => {
-                console.log(res);
-                console.log(res.data);
+                // console.log(res);
+                // console.log(res.data);
                 if (res.data.success === 'false') {
                     toast.error(res.error.message);
                 } else {
-                    console.log(res.data.message);
-                    navigate("/dashboard");
+                    // console.log(res.data.message);
+                    navigate("/student/dashboard");
                 }
             })
             .catch((error) => {
                 if (error.response) {
                     if (error.response.data.error.message) {
-                        console.log(error.response.data.error.message);
+                        // console.log(error.response.data.error.message);
                         toast.error(error.response.data.error.message);
                     }
                     else {
-                        console.log(error.response.data.error);
+                        // console.log(error.response.data.error);
                         toast.error(error.response.data.error);
                     }
                 }
@@ -72,8 +71,6 @@ function Register() {
             </div>
         </div>
     );
-
-
 }
 
 export default Register;

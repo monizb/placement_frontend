@@ -4,7 +4,8 @@ import React from 'react'
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/acharya-logo-1.png";
 import "../styles/Navbar.css";
-
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase.js";
 
 function Navbar({ name }) {
     let navigate = useNavigate();
@@ -30,6 +31,16 @@ function Navbar({ name }) {
             signout();
         }
     }
+    const toggleHome = () => {
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const role = await user.getIdTokenResult().then(idTokenResult => idTokenResult.claims.roles[0]);
+                let path = '/' + role + '/dashboard';
+                return navigate(path);
+            }
+            return navigate('/');
+        });
+    }
 
     return (
         <div>
@@ -40,13 +51,12 @@ function Navbar({ name }) {
                         <h3 style={{ marginLeft: 5 }}>Placement Cell</h3>
                     </Box>
                     <Box display="flex" style={{ alignItems: "center" }} flexGrow={0}>
-                        <h3 style={{ marginRight: 22 }}>Home</h3>
-                        <h3 style={{ marginRight: 22 }}>About</h3>
-                        <h3 style={{ marginRight: 22 }}>Contact Us</h3>
+                        <Button variant="text" onClick={toggleHome} style={{ marginRight: 22, color: "#ffffff", height: "fit-content", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>Home</Button>
+                        <Button variant="text" style={{ marginRight: 22, color: "#ffffff", height: "fit-content", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>About</Button>
+                        <Button variant="text" style={{ marginRight: 22, color: "#ffffff", height: "fit-content", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>Contact Us</Button>
                         <Button variant="contained" onClick={handleClick} style={{ color: "#283679", height: "fit-content", backgroundColor: "white", borderRadius: 3, border: "none", padding: "7px 20px", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>{name}</Button>
                     </Box>
                 </Toolbar>
-
             </AppBar>
         </div>
     );
