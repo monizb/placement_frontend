@@ -6,16 +6,58 @@ import LoginAs from "./pages/LoginAs";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { auth } from "./firebase.js";
+// import { getAuth } from "firebase"
 import AdminRoutes from "./routes/adminRoutes";
 import FacultyRoutes from "./routes/facultyRoutes";
 import StudentRoutes from "./routes/studentRoutes";
 import TpoRoutes from "./routes/tpoRoutes";
 import { onAuthStateChanged } from "firebase/auth";
+import axios from './configs/axios';
+
+
+
+
+// firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+//   // Send token to your backend via HTTPS
+//   // ...
+// }).catch(function(error) {
+//   // Handle error
+// });
+
+
+
+// const aut = getAuth()
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    // console.log("aut.currentUser =>", user);
+    await user.getIdToken(true).then(idToken => {
+      console.log("idToken =>", idToken);
+      axios.interceptors.request.use(
+        config => {
+          config.headers['Authorization'] = 'Bearer ' + idToken;
+          return config;
+        },
+        error => {
+          return Promise.reject(error);
+        }
+      );
+      // axios.defaults.headers.common["Authorization"] = "Bearer " + idToken;
+    });
+  }
+});
+
 
 
 function RequireAuth() {
+
   const navigate = useNavigate();
   onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      console.log("aut.currentUser =>", user);
+      await user.getIdToken().then(idToken => {
+        axios.defaults.headers.common["Authorization"] = "Bearer " + idToken;
+      });
+    }
     if (user) {
       const role = await user.getIdTokenResult().then(idTokenResult => idTokenResult.claims.roles[0]);
       if (role === "student") {
