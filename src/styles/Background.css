@@ -1,11 +1,12 @@
 .background {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #dce3ed;
-  }
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #dce3ed;
+  flex-direction: column;
+}
 
-  .LoginIcon {
-    width: 100px;
-  }
+.LoginIcon {
+  width: 100px;
+}

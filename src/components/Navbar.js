@@ -42,6 +42,12 @@ function Navbar({ name }) {
         });
     }
 
+    const profile = () => {
+        return navigate('/student/profile');
+    }
+    const calendar = () => {
+        return navigate('/student/calendar');
+    }
     return (
         <div>
             <AppBar style={{ backgroundColor: "#283679", padding: 6, boxShadow: "none" }}>
@@ -52,8 +58,9 @@ function Navbar({ name }) {
                     </Box>
                     <Box display="flex" style={{ alignItems: "center" }} flexGrow={0}>
                         <Button variant="text" onClick={toggleHome} style={{ marginRight: 22, color: "#ffffff", height: "fit-content", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>Home</Button>
-                        <Button variant="text" style={{ marginRight: 22, color: "#ffffff", height: "fit-content", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>About</Button>
-                        <Button variant="text" style={{ marginRight: 22, color: "#ffffff", height: "fit-content", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>Contact Us</Button>
+                        <Button variant="text" onClick={profile} style={{ marginRight: 22, color: "#ffffff", height: "fit-content", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>Profile</Button>
+                        {/* <Button variant="text" hidden='true' style={{ marginRight: 22, color: "#ffffff", height: "fit-content", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>Profile</Button> */}
+                        <Button variant="text" onClick={calendar} style={{ marginRight: 22, color: "#ffffff", height: "fit-content", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>Calendar</Button>
                         <Button variant="contained" onClick={handleClick} style={{ color: "#283679", height: "fit-content", backgroundColor: "white", borderRadius: 3, border: "none", padding: "7px 20px", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>{name}</Button>
                     </Box>
                 </Toolbar>

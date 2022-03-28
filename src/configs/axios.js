@@ -1,10 +1,32 @@
 import axios from "axios"
-// import { getAuth } from "firebase"
+// import { useContext } from "react";
+// import { AuthContext } from "../AuthProvider";
+
 const instance = axios.create({
     baseURL: "https://acharya-placement-dev.herokuapp.com/api"
 })
 
+// const Axiiios = () => {
+//     const { currentUser } = useContext(AuthContext);
 
+//     if (currentUser) {
+//         console.log("ffff")
+//         currentUser.getIdToken(true).then(idToken => {
+//             instance.interceptors.request.use(
+//                 config => {
+//                     config.headers['Authorization'] = 'Bearer ' + idToken;
+//                     return config;
+//                 },
+//                 error => {
+//                     return Promise.reject(error);
+//                 }
+//             );
+//         });
+//     };
+// };
+
+
+// Axiiios();
 
 
 // const instance = axios.create({

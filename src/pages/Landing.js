@@ -1,6 +1,12 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import "../styles/Background.css";
+
+
+import Tierbox from "../components/student_/Rectangularbox/Box1";
+import Footer from "../components/student_/Rectangularbox/Box2";
+import Topsection from "../components/student_/Topsection";
+import { Typography } from "@mui/material";
 function Landing() {
   return (
     <div>
@@ -11,7 +17,11 @@ function Landing() {
         {/* <h1>Welcome to the Landing Page</h1> */}
 
 
-        <h2 className="about">
+        <Topsection />
+        <br></br>
+        <Tierbox />
+        <br></br>
+        <Typography className="about">
           Ranking among the Top colleges in Bangalore, India Acharya Institutes
           was established in 1990. A cerebral destination for national and
           international students, we offer prestigious learning experience and a
@@ -20,8 +30,9 @@ function Landing() {
           to soothe your soul! Acharya Institutes is exactly what you have
           wished for. Come, discover Acharya Institutes - Where the world comes
           to Learn!
-        </h2>
-
+        </Typography>
+        <br></br>
+        <Footer />
 
       </div>
     </div>
