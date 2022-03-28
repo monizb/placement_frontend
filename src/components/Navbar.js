@@ -1,24 +1,19 @@
-import { getAuth, signOut } from "firebase/auth";
 import { AppBar, Toolbar, Box, Button } from '@mui/material';
 import React from 'react'
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/acharya-logo-1.png";
 import "../styles/Navbar.css";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../firebase.js";
+import { firebaseAuth } from "../firebase.js";
 
 function Navbar({ name }) {
     let navigate = useNavigate();
     const signout = () => {
-        const auth = getAuth();
-        signOut(auth).then(() => {
-            // Sign-out successful.
-            console.log("signout successful");
-            navigate('/login');
-        }).catch((error) => {
-            // An error happened.
-            console.log(error);
-        });
+        firebaseAuth.signOut()
+            .then(() => {
+                navigate("/");
+            }
+            )
+
     }
     const handleClick = () => {
         if (name === 'Sign In') {
@@ -31,16 +26,16 @@ function Navbar({ name }) {
             signout();
         }
     }
-    const toggleHome = () => {
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const role = await user.getIdTokenResult().then(idTokenResult => idTokenResult.claims.roles[0]);
-                let path = '/' + role + '/dashboard';
-                return navigate(path);
-            }
-            return navigate('/');
-        });
-    }
+    // const toggleHome = () => {
+    //     onAuthStateChanged(auth, async (user) => {
+    //         if (user) {
+    //             const role = await user.getIdTokenResult().then(idTokenResult => idTokenResult.claims.roles[0]);
+    //             let path = '/' + role + '/dashboard';
+    //             return navigate(path);
+    //         }
+    //         return navigate('/');
+    //     });
+    // }
 
     const profile = () => {
         return navigate('/student/profile');
@@ -57,7 +52,7 @@ function Navbar({ name }) {
                         <h3 style={{ marginLeft: 5 }}>Placement Cell</h3>
                     </Box>
                     <Box display="flex" style={{ alignItems: "center" }} flexGrow={0}>
-                        <Button variant="text" onClick={toggleHome} style={{ marginRight: 22, color: "#ffffff", height: "fit-content", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>Home</Button>
+                        {/* // <Button variant="text" onClick={toggleHome} style={{ marginRight: 22, color: "#ffffff", height: "fit-content", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>Home</Button> */}
                         <Button variant="text" onClick={profile} style={{ marginRight: 22, color: "#ffffff", height: "fit-content", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>Profile</Button>
                         {/* <Button variant="text" hidden='true' style={{ marginRight: 22, color: "#ffffff", height: "fit-content", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>Profile</Button> */}
                         <Button variant="text" onClick={calendar} style={{ marginRight: 22, color: "#ffffff", height: "fit-content", fontSize: 16, fontFamily: "Nunito", fontWeight: "bold" }}>Calendar</Button>

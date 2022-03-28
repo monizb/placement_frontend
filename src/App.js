@@ -1,5 +1,5 @@
 import "./App.css";
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Outlet, useNavigate } from "react-router-dom";
 import Landing from "./pages/Landing";
 import LoginAs from "./pages/LoginAs";
@@ -13,10 +13,12 @@ import StudentRoutes from "./routes/studentRoutes";
 import TpoRoutes from "./routes/tpoRoutes";
 // import { onAuthStateChanged } from "firebase/auth";
 // import axios from './configs/axios';
-import { AuthProvider, AuthContext } from "./AuthProvider";
+//import { AuthProvider, AuthContext } from "./AuthProvider";
 import { useEffect, useContext } from "react";
-import instance from "./configs/axios";
-import { getAuth, getIdToken, onAuthStateChanged } from "firebase/auth";
+import axios from "./configs/axios";
+import { firebaseAuth } from "./firebase";
+import Store from "./Store";
+//import { getAuth, getIdToken, onAuthStateChanged } from "firebase/auth";
 
 
 // firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
@@ -49,96 +51,55 @@ import { getAuth, getIdToken, onAuthStateChanged } from "firebase/auth";
 //   }
 // });
 
-
-
-function RequireAuth() {
-  const { currentUser } = useContext(AuthContext);
-  // const [username, setUsername] = useState("");
-  const navigate = useNavigate();
-  console.log(currentUser);
-  if (currentUser) {
-    // console.log("aut.currentUser =>", currentUser);
-    // currentUser.getIdToken().then(idToken => {
-    //   axios.defaults.headers.common["Authorization"] = "Bearer " + idToken;
-    // });
-
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // console.log("idToken =>", idToken);
-        instance.interceptors.use(
-          async config => {
-            const token = await currentUser.getIdToken(true);
-            config.headers['Authorization'] = 'Bearer ' + token;
-            return config;
-          },
-          error => {
-            // console.log("error =>");
-            return Promise.reject(error);
-
-          }
-        );
+axios.interceptors.request.use(
+  async config => {
+    console.log("request interceptor in work");
+    if (firebaseAuth.currentUser) {
+      const token = await firebaseAuth.currentUser.getIdToken();
+      if (token) {
+        config.headers["Authorization"] = "Bearer " + token;
       }
-    })
-
-    const role = currentUser.getIdTokenResult().then(idTokenResult => idTokenResult.claims.roles[0]);
-    if (role === "student") {
-      // console.log("student role auth");
-      return navigate("/student/dashboard");
     }
-    if (role === "faculty") {
-      return navigate("/faculty/dashboard");
-    }
-    if (role === "admin") {
-      return navigate("/admin/dashboard");
-    }
-    if (role === "tpo") {
-      return navigate("/tpo/dashboard");
-    }
+    return config
+  },
+  error => {
+    return Promise.reject(error)
   }
-  return <Outlet />;
-}
+);
 
-// function CurrrentUser() {
-// const user = auth.currentUser;
-// console.log(user);
-// if (user) {
-//   user.getIdTokenResult().then(idTokenResult => { console.log(idTokenResult.claims.roles[0]) });
-//   return <Navigate to="/student/dashboard" />;
-// }
-//   return <Outlet />;
-// }
 
 function App() {
-  // const [currentUser, setCurrentUser] = useState(null)
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, async (user) => {
-  //     setCurrentUser(user);
-  //     if (currentUser) {
-  //       // console.log("aut.currentUser =>", user);
-  //       await currentUser.getIdToken(true).then(idToken => {
-  //         // console.log("idToken =>", idToken);
-  //         axios.interceptors.request.use(
-  //           config => {
-  //             config.headers['Authorization'] = 'Bearer ' + idToken;
-  //             return config;
-  //           },
-  //           error => {
-  //             return Promise.reject(error);
-  //           }
-  //         );
-  //         // axios.defaults.headers.common["Authorization"] = "Bearer " + idToken;
-  //       });
-  //     }
-  //   })
-  // }, [])
+  const [open, setOpen] = React.useState(false);
+  const [authentication, setAuthState] = useState({
+    authenticated: false,
+    initialized: true,
+    type: null
+  });
+  React.useEffect(() => firebaseAuth.onAuthStateChanged(async function (user) {
+
+    if (user) { //the user has been logged in
+      let token_result = await firebaseAuth.currentUser.getIdTokenResult();
+      setAuthState({
+        authenticated: true, //the user is now authenticated
+        initialized: true,
+        type: token_result.claims.account
+      });
+    } else { //the user has been logged out
+      setAuthState({
+        authenticated: false, //the user is no longer authenticated
+        initialized: false
+      });
+    }
+
+    console.log(authentication);
+  }), [setAuthState]);
   return (
-    <AuthProvider>
-      <div className="App">
+    <div className="App">
+      <Store>
         <Router>
           <Routes>
             <Route exact path="/" element={<Landing />} />
-            <Route element={<RequireAuth />} >
+            <Route >
               <Route exact path="/register" element={<Register />} />
               <Route exact path="/login" element={<LoginAs />} />
               <Route exact path="/login/student" element={<Login name="Student" />} />
@@ -160,8 +121,8 @@ function App() {
             {/* </Route> */}
           </Routes>
         </Router>
-      </div>
-    </AuthProvider>
+      </Store>
+    </div>
   );
 }
 

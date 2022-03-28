@@ -1,9 +1,9 @@
 import Body from "../Body";
-import axios from '../../../configs/axios';
 import React, { useState, useEffect } from "react";
 import Readmore from "./Readmore";
 import Typography from "@mui/material/Typography";
 import '../../../styles/Background.css'
+import axios from '../../../configs/axios';
 
 function DatafetchingBody() {
   const [job, setJob] = useState(null);

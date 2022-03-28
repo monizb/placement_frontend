@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState, useEffect } from 'react'
+//import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { TextField, Button } from '@mui/material';
@@ -7,33 +7,45 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoginIcon from "../assets/aac.png";
 import "../styles/Background.css";
+import { firebaseAuth } from "../firebase"
 
 function Login({ name }) {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     const navigate = useNavigate();
 
+    useEffect(() => {
+        // check if user is already logged in and redirect to home page
+        firebaseAuth.onAuthStateChanged(user => {
+            if (user) {
+                history.push('/student/dashboard');
+            }
+        });
+    }, []);
+
     const login = () => {
-        const auth = getAuth();
-        signInWithEmailAndPassword(auth, email, pass)
+        firebaseAuth.signInWithEmailAndPassword(email, pass)
             .then(async (userCredential) => {
                 // Signed in 
-                const user = userCredential.user;
-                const role = await user.getIdTokenResult().then(idTokenResult => idTokenResult.claims.roles[0]);
-                // console.log(role);
+                firebaseAuth.onAuthStateChanged(async (user) => {
+                    if (user) {
+                        const role = await user.getIdTokenResult().then(idTokenResult => idTokenResult.claims.roles[0]);
+                        // console.log(role);
 
-                if (role === 'student') {
-                    navigate("/student/dashboard");
-                }
-                else if (role === 'faculty') {
-                    navigate("/faculty/dashboard");
-                }
-                else if (role === 'admin') {
-                    navigate("/admin/dashboard");
-                }
-                else if (role === 'tpo') {
-                    navigate("/tpo/dashboard");
-                }
+                        if (role === 'student') {
+                            navigate("/student/dashboard");
+                        }
+                        else if (role === 'faculty') {
+                            navigate("/faculty/dashboard");
+                        }
+                        else if (role === 'admin') {
+                            navigate("/admin/dashboard");
+                        }
+                        else if (role === 'tpo') {
+                            navigate("/tpo/dashboard");
+                        }
+                    }
+                })
                 // console.log('signin success');
                 // ...
             })
