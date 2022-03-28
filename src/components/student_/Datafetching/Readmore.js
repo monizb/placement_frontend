@@ -1,15 +1,16 @@
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { firebaseAuth } from "../../../firebase";
 export default function Readmore(props) {
 
   let navigate = useNavigate();
-  const readmore = (e) => {
+  const readmore = async (e) => {
 
     console.log("dd", props.Id);
     console.log("dd", props.Id);
     console.log("dd", props.Id);
     console.log("dd", props.Id);
-    navigate(`/student/jobs/details/${props.Id}`);
+    navigate(`/student/jobs/details/${props.Id}?token=` + await firebaseAuth.currentUser.getIdToken(true));
     // history.push(
     //   {
     //     pathname:`./HomeSec/${props.Id}`

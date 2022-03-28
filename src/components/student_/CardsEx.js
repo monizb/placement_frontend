@@ -5,6 +5,8 @@ import Typography from "@mui/material/Typography";
 
 import axios from "../../configs/axios";
 
+import { firebaseAuth } from "../../firebase";
+
 
 function CardsEx() {
   const pathname = window.location.pathname;
@@ -15,8 +17,13 @@ function CardsEx() {
   useEffect(() => {
     async function fetchData() {
       console.log(jobId);
+      const params = new URLSearchParams(window.location.search)
       await axios
-        .get(`/student/job/${jobId}`)
+        .get(`/student/job/${jobId}`, {
+          headers: {
+            Authorization: 'Bearer ' + params.get('token')
+          }
+        })
         .then((res) => {
           console.log(res.data);
           setJobdetail(res.data.job);
